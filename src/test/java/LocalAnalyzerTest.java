@@ -30,7 +30,7 @@ public class LocalAnalyzerTest {
             "The constructor from class OnlineCoursesAnalyzer is not public!");
       }
       courseInfo = constructor.newInstance(
-          "/Users/guodenghao/IdeaProjects/CS209Ass1-12011910/src/main/resources/local.csv");
+          "C:\\Users\\12630\\IdeaProjects\\cs209ass1forcheck\\src\\main\\resources\\local.csv");
 //            resources/local.csv
     } catch (ClassNotFoundException | InvocationTargetException | InstantiationException |
              IllegalAccessException | NoSuchMethodException e) {

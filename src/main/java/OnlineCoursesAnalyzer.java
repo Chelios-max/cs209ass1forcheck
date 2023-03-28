@@ -3,11 +3,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.Comparator;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.Comparator;
+
 
 /**
  * This is just a demo for you, please run it on JDK17 (some statements may be not allowed in lower
@@ -38,7 +39,6 @@ public class OnlineCoursesAnalyzer {
             Double.parseDouble(info[20]),
             Double.parseDouble(info[21]), Double.parseDouble(info[22]));
         courses.add(course);
-//                System.out.println(course.getInstitution());
       }
     } catch (IOException e) {
       e.printStackTrace();
@@ -83,11 +83,11 @@ public class OnlineCoursesAnalyzer {
         .collect(Collectors.groupingBy(Course::getInstructors));
     List<String> alltea = new ArrayList<>();
     for (Course course : courses) {
-      String s[] = course.getInstructors().split(", ");
+      String []s = course.getInstructors().split(", ");
       for (String s1 : s) {
-          if (!alltea.contains(s1)) {
-              alltea.add(s1);
-          }
+        if (!alltea.contains(s1)) {
+          alltea.add(s1);
+        }
       }
     }
 
@@ -100,31 +100,31 @@ public class OnlineCoursesAnalyzer {
       }
       List<Course> list2 = sig.get(key);
       for (Course course : list2) {
-          if (list.contains(course.title)) {
-              continue;
-          }
+        if (list.contains(course.title)) {
+          continue;
+        }
         list.add(course.title);
       }
-        if (!list.isEmpty()) {
-            list.sort(new Comparator<String>() {
-                @Override
-                public int compare(String o1, String o2) {
-                    for (int i = 0; i < Math.min(o1.length(), o2.length()); i++) {
-                        if (o1.charAt(i) > o2.charAt(i)) {
-                            return 1;
-                        }
-                        if (o1.charAt(i) < o2.charAt(i)) {
-                            return -1;
-                        }
-                    }
-                    if (o1.length() > o2.length()) {
-                        return 1;
-                    } else {
-                        return -1;
-                    }
-                }
-            });
-        }
+      if (!list.isEmpty()) {
+        list.sort(new Comparator<String>() {
+          @Override
+          public int compare(String o1, String o2) {
+            for (int i = 0; i < Math.min(o1.length(), o2.length()); i++) {
+              if (o1.charAt(i) > o2.charAt(i)) {
+                return 1;
+              }
+              if (o1.charAt(i) < o2.charAt(i)) {
+                return -1;
+              }
+            }
+            if (o1.length() > o2.length()) {
+              return 1;
+            } else {
+              return -1;
+            }
+          }
+        });
+      }
       sig2.put(key, list);
     }
 
@@ -133,15 +133,15 @@ public class OnlineCoursesAnalyzer {
       List<String> list = new ArrayList<>();
       for (Course course : courses
       ) {
-          if (!course.getInstructors().contains(",")) {
-              continue;
-          }
-        String ss[] = course.getInstructors().split(", ");
+        if (!course.getInstructors().contains(",")) {
+          continue;
+        }
+        String []ss = course.getInstructors().split(", ");
         for (String ss2 : ss) {
           if (ss2.equals(key)) {
-              if (!list.contains(course.getTitle())) {
-                  list.add(course.getTitle());
-              }
+            if (!list.contains(course.getTitle())) {
+              list.add(course.getTitle());
+            }
           }
         }
 
@@ -151,18 +151,18 @@ public class OnlineCoursesAnalyzer {
         @Override
         public int compare(String o1, String o2) {
           for (int i = 0; i < Math.min(o1.length(), o2.length()); i++) {
-              if (o1.charAt(i) > o2.charAt(i)) {
-                  return 1;
-              }
-              if (o1.charAt(i) < o2.charAt(i)) {
-                  return -1;
-              }
-          }
-            if (o1.length() > o2.length()) {
-                return 1;
-            } else {
-                return -1;
+            if (o1.charAt(i) > o2.charAt(i)) {
+              return 1;
             }
+            if (o1.charAt(i) < o2.charAt(i)) {
+              return -1;
+            }
+          }
+          if (o1.length() > o2.length()) {
+            return 1;
+          } else {
+            return -1;
+          }
         }
       });
       mul.put(key, list);
@@ -212,11 +212,11 @@ public class OnlineCoursesAnalyzer {
   //6
   public List<String> recommendCourses(int age, int gender, int isBachelorOrHigher) {
 
-    Map<String, Double> AMage = courses.stream().collect(
+    Map<String, Double> aMage = courses.stream().collect(
         Collectors.groupingBy(Course::getNumber, Collectors.averagingDouble(Course::getMedianAge)));
-    Map<String, Double> AMale = courses.stream().collect(Collectors.groupingBy(Course::getNumber,
+    Map<String, Double> aMale = courses.stream().collect(Collectors.groupingBy(Course::getNumber,
         Collectors.averagingDouble(Course::getPercentMale)));
-    Map<String, Double> ADgree = courses.stream().collect(Collectors.groupingBy(Course::getNumber,
+    Map<String, Double> aDgree = courses.stream().collect(Collectors.groupingBy(Course::getNumber,
         Collectors.averagingDouble(Course::getPercentDegree)));
     Map<String, Course> Fcourse = courses.stream().collect(
         Collectors.toMap(Course::getNumber, Function.identity(),
@@ -224,17 +224,16 @@ public class OnlineCoursesAnalyzer {
     List<String> ret = new ArrayList<>();
     Map<String, Double> ran = new HashMap<>();
     List<Double> allran = new ArrayList<>();
-    for (String key : AMage.keySet()) {
+    for (String key : aMage.keySet()) {
       double fs;
-      double aveage = AMage.get(key);
-      double avemal = AMale.get(key);
-      double avedeg = ADgree.get(key);
+      double aveage = aMage.get(key);
+      double avemal = aMale.get(key);
+      double avedeg = aDgree.get(key);
 
       fs = (0.0 + age - aveage) * (0.0 + age - aveage) + (0.0 + gender * 100 - avemal) * (
           0.0 + gender * 100 - avemal) + (0.0 + isBachelorOrHigher * 100 - avedeg) * (
           0.0 + isBachelorOrHigher * 100 - avedeg);
       fs += 0.000001 * Fcourse.get(key).getTitle().charAt(0);
-//            if(fs<740) fs=740;
       ran.put(key, fs);
       allran.add(fs);
 
@@ -243,47 +242,46 @@ public class OnlineCoursesAnalyzer {
     allran.sort(new Comparator<Double>() {
       @Override
       public int compare(Double o1, Double o2) {
-          if (o1 < o2) {
+        if (o1 < o2) {
+          return -1;
+        }
+        if (o1 > o2) {
+          return 1;
+        } else {
+          String s1 = null;
+          String s2 = null;
+          for (String key : ran.keySet()) {
+            if (o1.equals(ran.get(key))) {
+              s1 = key;
+            }
+            if (o2.equals(ran.get(key))) {
+              s2 = key;
+            }
+          }
+          s1 = Fcourse.get(s1).getTitle();
+          s2 = Fcourse.get(s2).getTitle();
+          System.out.println(s1);
+          System.out.println(s2);
+          for (int i = 0; i < Math.min(s1.length(), s2.length()); i++) {
+            if (s1.charAt(i) > s2.charAt(i)) {
               return -1;
-          }
-          if (o1 > o2) {
+            }
+            if (s1.charAt(i) < s2.charAt(i)) {
               return 1;
-          } else {
-              String s1 = null;
-              String s2 = null;
-              for (String key : ran.keySet()) {
-                  if (o1.equals(ran.get(key))) {
-                      s1 = key;
-                  }
-                  if (o2.equals(ran.get(key))) {
-                      s2 = key;
-                  }
-              }
-              s1 = Fcourse.get(s1).getTitle();
-              s2 = Fcourse.get(s2).getTitle();
-              System.out.println(s1);
-              System.out.println(s2);
-              for (int i = 0; i < Math.min(s1.length(), s2.length()); i++) {
-                  if (s1.charAt(i) > s2.charAt(i)) {
-                      return -1;
-                  }
-                  if (s1.charAt(i) < s2.charAt(i)) {
-                      return 1;
-                  }
-              }
-              if (s1.length() > s2.length()) {
-                  return 1;
-              } else {
-                  return -1;
-              }
+            }
           }
+          if (s1.length() > s2.length()) {
+            return 1;
+          } else {
+            return -1;
+          }
+        }
       }
     });
     int maofc = 10;
     for (int i = 0; i < maofc; i++) {
       String num = null;
       double fs = allran.get(i);
-//            System.out.println(fs);
       for (String key : ran.keySet()) {
         if (ran.get(key) == fs) {
           num = key;
@@ -304,156 +302,3 @@ public class OnlineCoursesAnalyzer {
 
 }
 
-class Course {
-
-  String institution;
-  String number;
-  Date launchDate;
-  String title;
-  String instructors;
-  String subject;
-  int year;
-  int honorCode;
-  int participants;
-  int audited;
-  int certified;
-  double percentAudited;
-  double percentCertified;
-  double percentCertified50;
-  double percentVideo;
-  double percentForum;
-  double gradeHigherZero;
-  double totalHours;
-  double medianHoursCertification;
-  double medianAge;
-  double percentMale;
-  double percentFemale;
-  double percentDegree;
-
-  public String getNumber() {
-    return number;
-  }
-
-
-  public double getMedianAge() {
-    return medianAge;
-  }
-
-  public double getPercentFemale() {
-    return percentFemale;
-  }
-
-  public String toString() {
-    return this.title;
-  }
-
-  public Long getLaunchDate() {
-    return launchDate.getTime();
-//        return launchDate;
-  }
-
-  public int getHonorCode() {
-    return honorCode;
-  }
-
-  public int getAudited() {
-    return audited;
-  }
-
-  public String getInstitutionandSubject() {
-    return institution + "-" + subject;
-  }
-
-  public int getCertified() {
-    return certified;
-  }
-
-  public double getTotalHours() {
-    return totalHours;
-  }
-
-  public double getPercentAudited() {
-    return percentAudited;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public double getPercentCertified() {
-    return percentCertified;
-  }
-
-  public String getInstitution() {
-    return institution;
-  }
-
-  public String getInstructors() {
-    return instructors;
-  }
-
-  public int getParticipants() {
-    return participants;
-  }
-
-  public double getPercentMale() {
-    return percentMale;
-  }
-
-  public double getPercentDegree() {
-    return percentDegree;
-  }
-
-
-  public Course(String institution, String number, Date launchDate,
-      String title, String instructors, String subject,
-      int year, int honorCode, int participants,
-      int audited, int certified, double percentAudited,
-      double percentCertified, double percentCertified50,
-      double percentVideo, double percentForum, double gradeHigherZero,
-      double totalHours, double medianHoursCertification,
-      double medianAge, double percentMale, double percentFemale,
-      double percentDegree) {
-    this.institution = institution;
-    this.number = number;
-    this.launchDate = launchDate;
-      if (title.startsWith("\"")) {
-          title = title.substring(1);
-      }
-      if (title.endsWith("\"")) {
-          title = title.substring(0, title.length() - 1);
-      }
-    this.title = title;
-      if (instructors.startsWith("\"")) {
-          instructors = instructors.substring(1);
-      }
-      if (instructors.endsWith("\"")) {
-          instructors = instructors.substring(0, instructors.length() - 1);
-      }
-    this.instructors = instructors;
-      if (subject.startsWith("\"")) {
-          subject = subject.substring(1);
-      }
-      if (subject.endsWith("\"")) {
-          subject = subject.substring(0, subject.length() - 1);
-      }
-    this.subject = subject;
-    this.year = year;
-    this.honorCode = honorCode;
-    this.participants = participants;
-    this.audited = audited;
-    this.certified = certified;
-    this.percentAudited = percentAudited;
-    this.percentCertified = percentCertified;
-    this.percentCertified50 = percentCertified50;
-    this.percentVideo = percentVideo;
-    this.percentForum = percentForum;
-    this.gradeHigherZero = gradeHigherZero;
-    this.totalHours = totalHours;
-    this.medianHoursCertification = medianHoursCertification;
-    this.medianAge = medianAge;
-    this.percentMale = percentMale;
-    this.percentFemale = percentFemale;
-    this.percentDegree = percentDegree;
-  }
-}
